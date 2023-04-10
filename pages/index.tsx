@@ -12,6 +12,7 @@ import Send from "@/components/vectors/Send";
 import { useChat } from "@/context/chat-context";
 import AIMessage from "@/components/AIMessage";
 import User from "@/components/vectors/User";
+import Spinner from "@/components/vectors/Spinner";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,9 +23,10 @@ const poppins = Poppins({
 export default function Home() {
   const [message, setMessage] = useState("");
   const { messages, sendMessage } = useChat();
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
-    console.log(messages);
-  }, [messages]);
+    console.log(loading);
+  }, [loading]);
   return (
     <>
       <head>
@@ -52,24 +54,28 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-3">
-                  {messages.map((msg: { role: string; content: string }) =>
-                    msg.role === "user" ? (
-                      <p className="bg-[#FCF6F1] p-5 flex gap-5">
-                        <div>
-                          <User className="w-[30px]  h-[30px] text-gray-600" />
+                  {messages.map(
+                    (msg: { role: string; content: string }, i: number) =>
+                      msg.role === "user" ? (
+                        <p key={i} className="bg-[#FCF6F1] p-5 flex gap-5">
+                          <div>
+                            <User className="w-[30px]  h-[30px] text-gray-600" />
+                          </div>
+                          {msg.content}
+                        </p>
+                      ) : (
+                        <div key={i} className="p-5 flex gap-3">
+                          <Image
+                            className="w-[40px]  h-[40px] rounded-lg"
+                            src={Celo}
+                            alt="celo logo"
+                          />
+                          <AIMessage
+                            setLoading={setLoading}
+                            query={msg.content}
+                          />
                         </div>
-                        {msg.content}
-                      </p>
-                    ) : (
-                      <div className="p-5 flex gap-3">
-                        <Image
-                          className="w-[40px]  h-[40px] rounded-lg"
-                          src={Celo}
-                          alt="celo logo"
-                        />
-                        <AIMessage query={msg.content} />
-                      </div>
-                    )
+                      )
                   )}
                 </div>
               </div>
@@ -77,6 +83,7 @@ export default function Home() {
             <form
               className="absolute flex bottom-5 max-w-md left-1/2 -translate-x-1/2 w-full"
               onSubmit={(e) => {
+                setLoading(true);
                 sendMessage(e, message);
                 setMessage("");
               }}
@@ -86,12 +93,22 @@ export default function Home() {
                 onChange={(e) => {
                   setMessage(e.target.value);
                 }}
+                disabled={loading}
                 placeholder="Type a message..."
                 className="outline-none max-w-md mx-auto w-full h-12 px-4 rounded-lg border bg-[#FCF6F1] border-gray-300"
               />
-              <button type="submit">
-                <Send className="absolute right-2 text-gray-600 top-1/2 -translate-y-1/2" />
-              </button>
+              {!loading ? (
+                <button type="submit">
+                  <Send className="absolute right-2 text-gray-600 top-1/2 -translate-y-1/2" />
+                </button>
+              ) : (
+                <button
+                  className="absolute right-2 text-gray-600 top-1/2 -translate-y-1/2"
+                  disabled
+                >
+                  <Spinner className="w-6 h-6 " />
+                </button>
+              )}
             </form>
           </div>
         </main>

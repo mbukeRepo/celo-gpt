@@ -31,7 +31,6 @@ export const useBuffer: BufferHook = ({
 
   const [state, dispatch] = useReducer(streamState, initialState);
   const { done, buffer, refreshCount } = state;
-  //   const {setMessages, messages} = useChat();
 
   const streamChunks = useCallback(
     async (stream: AsyncGenerator<Uint8Array>, delay: number) => {
@@ -74,7 +73,6 @@ export const useBuffer: BufferHook = ({
         });
 
         if (!response.ok || !response.body) {
-          // console.log()
           throw new Error(`Failed to load response from URL: ${url}`);
         }
 

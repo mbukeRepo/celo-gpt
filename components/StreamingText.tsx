@@ -17,7 +17,7 @@ import ReactMarkdown from "react-markdown";
 import he from "he";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { dark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 // import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 // import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -67,7 +67,6 @@ export const StreamingText: FC<StreamingTextProps> = ({
   const [index, setIndex] = useState(0);
   const textRef = useRef<HTMLElement>(null);
   const fadedChunks = buffer.map((chunk, i) => {
-    // console.log(chunk);
     return (
       <span style={{ opacity: i < index ? 1 : 0 }} key={i}>
         {chunk}
@@ -112,7 +111,6 @@ export const StreamingText: FC<StreamingTextProps> = ({
   const markdown = ReactDOMServer.renderToStaticMarkup(
     fadedChunks as any
   ).replace(/<\/?span[^>]*>/g, "");
-  console.log("markdown", { markdown });
   return (
     // @ts-ignore - ref any
     <p className="markdown" ref={textRef} {...props}>

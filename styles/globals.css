@@ -36,11 +36,14 @@ body {
   display: none; /* Safari and Chrome */
 }
 .markdown p {
-  @apply leading-[28px] text-[17px];
+  @apply leading-[30px] text-[17px];
 }
-/* pre {
+/* /* pre {
   @apply py-6;
-}
-pre code {
+} */
+/* pre code {
   @apply !py-4;
 } */
+pre {
+  @apply rounded-md;
+}
