@@ -6,13 +6,13 @@ import remarkGfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
 import { useTextBuffer } from "../hooks/useTextBuffer";
 import { StreamingText } from "../components/StreamingText";
-import { Head } from "next/document";
 import Celo from "../public/celo-gpt.webp";
 import Send from "@/components/vectors/Send";
 import { useChat } from "@/context/chat-context";
 import AIMessage from "@/components/AIMessage";
 import User from "@/components/vectors/User";
 import Spinner from "@/components/vectors/Spinner";
+import Head from "next/head";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,10 +29,10 @@ export default function Home() {
   }, [loading]);
   return (
     <>
-      <head>
+      <Head>
         <title>celo-gpt</title>
         <link rel="icon" href="/favicon.ico" />
-      </head>
+      </Head>
       <main className="flex bg-[#FCF6F1] h-screen flex-col items-center justify-between p-24-">
         <main
           className={`min-h-screen px-4  bg-gray-400- place-content-center grid min-w-[100vw]- ${poppins.className}`}
@@ -99,7 +99,7 @@ export default function Home() {
               />
               {!loading ? (
                 <button type="submit">
-                  <Send className="absolute right-4 md:right-2 text-gray-600 top-1/2 -translate-y-1/2" />
+                  <Send className="absolute right-4 md:right-4 text-gray-600 top-1/2 -translate-y-1/2" />
                 </button>
               ) : (
                 <button
