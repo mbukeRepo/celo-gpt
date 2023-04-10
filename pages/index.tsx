@@ -81,7 +81,7 @@ export default function Home() {
               </div>
             </div>
             <form
-              className="absolute px-2 flex bottom-5 max-w-md left-1/2 -translate-x-1/2 w-full"
+              className="absolute px-2 flex bottom-5 max-w-[320px] md:max-w-md left-1/2 -translate-x-1/2 w-full"
               onSubmit={(e) => {
                 setLoading(true);
                 sendMessage(e, message);
