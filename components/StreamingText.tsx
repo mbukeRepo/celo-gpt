@@ -7,10 +7,19 @@
  * I was both depressed and inspired by how uncooperative React is with such a
  * simple use case, especially for Safari. We did the best we could.
  */
-
+import ReactDOMServer from "react-dom/server";
 import { FC, HTMLAttributes, useEffect, useRef, useState } from "react";
 import { useTextBuffer } from "../hooks/useTextBuffer";
 import { FetchBufferOptions } from "../hooks/types";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import ReactMarkdown from "react-markdown";
+import he from "he";
+
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
+// import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+// import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 export interface StreamingTextProps extends HTMLAttributes<HTMLElement> {
   /**
@@ -57,11 +66,14 @@ export const StreamingText: FC<StreamingTextProps> = ({
   const empty = buffer.length === 0 || text.trim() === "";
   const [index, setIndex] = useState(0);
   const textRef = useRef<HTMLElement>(null);
-  const fadedChunks = buffer.map((chunk, i) => (
-    <span style={{ opacity: i < index ? 1 : 0 }} key={i}>
-      {chunk}
-    </span>
-  ));
+  const fadedChunks = buffer.map((chunk, i) => {
+    // console.log(chunk);
+    return (
+      <span style={{ opacity: i < index ? 1 : 0 }} key={i}>
+        {chunk}
+      </span>
+    );
+  });
 
   /**
    * Handle resets and buffer size changes.
@@ -97,12 +109,44 @@ export const StreamingText: FC<StreamingTextProps> = ({
 
     setIndex(index + 1);
   }, [buffer, fade, index]);
-
+  const markdown = ReactDOMServer.renderToStaticMarkup(
+    fadedChunks as any
+  ).replace(/<\/?span[^>]*>/g, "");
+  console.log("markdown", { markdown });
   return (
     // @ts-ignore - ref any
-    <ElementType ref={textRef} {...props}>
-      {empty ? <>&shy;</> : fadedChunks}
-    </ElementType>
+    <p className="markdown" ref={textRef} {...props}>
+      <ReactMarkdown
+        rehypePlugins={[rehypeRaw]}
+        children={ReactDOMServer.renderToStaticMarkup(fadedChunks as any)
+          .replace(/<\/?span[^>]*>/g, "")
+          .replace(/&quot;/g, '"')
+          .replace(/&lt;/g, "<")
+          .replace(/&gt;/g, ">")}
+        remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
+        components={{
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || "");
+            return !inline && match ? (
+              <SyntaxHighlighter
+                {...props}
+                children={String(children).replace(/\n$/, "")}
+                style={dark}
+                language={match[1]}
+                PreTag="div"
+              />
+            ) : (
+              <code
+                {...props}
+                className={`py-[2px] rounded-md px-4 bg-[#FCF6F1]`}
+              >
+                {children}
+              </code>
+            );
+          },
+        }}
+      />
+    </p>
   );
 };
 
