@@ -37,7 +37,7 @@ export default function Home() {
         <main
           className={`min-h-screen px-4  bg-gray-400- place-content-center grid min-w-[100vw]- ${poppins.className}`}
         >
-          <div className="max-w-[800px] relative h-full  min-w-[380px] border-3 border-[#331E3F] bg-[#E7E3D4] text-gray-900 shadow-lg md:rounded-md py-8 flex  mx-auto">
+          <div className="max-w-[800px] relative h-full border-3 border-[#331E3F] bg-[#E7E3D4] text-gray-900 shadow-lg md:rounded-md py-8 flex  mx-auto">
             <div className="self-end w-full pb-12 flex h-[73vh] md:h-[65vh] overflow-scroll scroll-hidden flex-col justify-between">
               <div className="flex flex-col gap-3">
                 <div className="flex gap-3 px-5">
@@ -81,7 +81,7 @@ export default function Home() {
               </div>
             </div>
             <form
-              className="absolute flex bottom-5 max-w-md left-1/2 -translate-x-1/2 w-full"
+              className="absolute px-2 flex bottom-5 max-w-md left-1/2 -translate-x-1/2 w-full"
               onSubmit={(e) => {
                 setLoading(true);
                 sendMessage(e, message);
@@ -99,7 +99,7 @@ export default function Home() {
               />
               {!loading ? (
                 <button type="submit">
-                  <Send className="absolute right-2 text-gray-600 top-1/2 -translate-y-1/2" />
+                  <Send className="absolute right-4 md:right-2 text-gray-600 top-1/2 -translate-y-1/2" />
                 </button>
               ) : (
                 <button
