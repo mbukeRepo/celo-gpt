@@ -103,7 +103,7 @@ export default function Home() {
                 </button>
               ) : (
                 <button
-                  className="absolute right-2 text-gray-600 top-1/2 -translate-y-1/2"
+                  className="absolute right-4 text-gray-600 top-1/2 -translate-y-1/2"
                   disabled
                 >
                   <Spinner className="w-6 h-6 " />
