@@ -45,5 +45,14 @@ body {
   @apply !py-4;
 } */
 pre {
-  @apply rounded-md;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+  @apply rounded-md max-w-[240px] scroll-hidden;
+}
+pre div {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+pre div::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
