@@ -10,7 +10,7 @@ This is a chatbot based on gpt-3.5 model, trained on the Celo documentation.
 
 ### How to train
 
-To learn more about how to train your own model, check out this blog: [How I built celo-gpt](https://github.com/mbukeRepo/celo-gpt-core), I wrote on how to use openai embeddings api to train gpt-3.5 on your content.
+To learn more about how to train your gpt-3.5 on your knowledge base, check out this tutorial: [How I built celo-gpt](https://github.com/mbukeRepo/celo-gpt-core), I wrote on how to use openai embeddings api to train gpt-3.5 on your content.
 
 ### How to contribute
 
