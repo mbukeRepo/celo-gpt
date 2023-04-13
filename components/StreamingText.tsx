@@ -14,10 +14,10 @@ import { FetchBufferOptions } from "../hooks/types";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
+import he from "he";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-
-import { nightOwl } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { dark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
 // import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 // import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -35,7 +35,6 @@ export interface StreamingTextProps extends HTMLAttributes<HTMLElement> {
    * The duration of the fade-in animation in milliseconds. Defaults to 600.
    */
   fade?: number;
-  loading?: boolean;
 }
 
 /**
@@ -61,7 +60,6 @@ export const StreamingText: FC<StreamingTextProps> = ({
   buffer,
   as: ElementType = "p",
   fade = 600,
-  loading,
   ...props
 }) => {
   const text = buffer.join("");
@@ -110,44 +108,35 @@ export const StreamingText: FC<StreamingTextProps> = ({
 
     setIndex(index + 1);
   }, [buffer, fade, index]);
-
-  const markdown = ReactDOMServer.renderToStaticMarkup(fadedChunks as any)
-    .replace(/<\/?span[^>]*>/g, "")
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">");
+  const markdown = ReactDOMServer.renderToStaticMarkup(
+    fadedChunks as any
+  ).replace(/<\/?span[^>]*>/g, "");
   return (
     // @ts-ignore - ref any
-    <>
+    <p className="markdown" ref={textRef} {...props}>
       <ReactMarkdown
         rehypePlugins={[rehypeRaw]}
-        children={markdown}
+        children={ReactDOMServer.renderToStaticMarkup(fadedChunks as any)
+          .replace(/<\/?span[^>]*>/g, "")
+          .replace(/&quot;/g, '"')
+          .replace(/&lt;/g, "<")
+          .replace(/&gt;/g, ">")}
         remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
         components={{
-          p: ({ children }) => (
-            <p className="markdown-p !leading-8">
-              {children}
-              {loading && (
-                <span className="w-[5px] hidden relative top-[2px] mt-1 ml-2 blink bg-slate-300 h-[16px]"></span>
-              )}
-            </p>
-          ),
           code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "js");
+            const match = /language-(\w+)/.exec(className || "");
             return !inline && match ? (
-              <pre className="pre-syntax">
-                <SyntaxHighlighter
-                  {...props}
-                  children={String(children).replace(/\n$/, "")}
-                  style={nightOwl}
-                  language={match[1]}
-                  PreTag="div"
-                />
-              </pre>
+              <SyntaxHighlighter
+                {...props}
+                children={String(children).replace(/\n$/, "")}
+                style={dark}
+                language={match[1]}
+                PreTag="div"
+              />
             ) : (
               <code
                 {...props}
-                className={`py-[3px] rounded-[2px] text-slate-300 px-2 bg-slate-700 bg-opacity-30`}
+                className={`py-[2px] rounded-md px-4 bg-[#FCF6F1]`}
               >
                 {children}
               </code>
@@ -155,10 +144,7 @@ export const StreamingText: FC<StreamingTextProps> = ({
           },
         }}
       />
-      {loading && fadedChunks.length === 0 && (
-        <span className="w-[5px] inline-flex relative top-[2px] mt-1 ml-2 blink bg-slate-300 h-[16px]"></span>
-      )}
-    </>
+    </p>
   );
 };
 

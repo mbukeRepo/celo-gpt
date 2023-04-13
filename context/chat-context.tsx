@@ -6,20 +6,20 @@ import {
   useState,
   useMemo,
 } from "react";
+import axios from "axios";
+import { FormEventHandler } from "react";
 
 interface IChatContext {
   messages: { role: string; content: string }[];
   sendMessage: (event: any, data: string) => void;
   loading: boolean;
   setLoading: (loading: boolean) => void;
-  clearMessages: () => void;
 }
 
 const ChatContext = createContext<IChatContext>({
   messages: [],
   sendMessage: () => {},
   loading: false,
-  clearMessages: () => {},
   setLoading: () => {},
 });
 
@@ -29,9 +29,6 @@ const ChatProvider = ({ children }: { children: ReactNode }) => {
   );
   const [loading, setLoading] = useState(false);
 
-  const clearMessages = () => {
-    setMessages([]);
-  };
   const sendMessage = useCallback(
     async (event: any, message: string) => {
       event.preventDefault();
@@ -49,7 +46,7 @@ const ChatProvider = ({ children }: { children: ReactNode }) => {
   );
 
   const value = useMemo(
-    () => ({ messages, sendMessage, loading, setLoading, clearMessages }),
+    () => ({ messages, sendMessage, loading, setLoading }),
     [messages, sendMessage]
   );
 
