@@ -138,7 +138,7 @@ const formatOutputWithChatGPT = async (
           "Sorry, I don't know how to help with that."
         `}
         ${oneLine`
-          - Prefer splitting your response into multiple paragraphs.
+          - Prefer splitting your response into multiple paragraphs and add one blank line between them.
         `}
         ${oneLine`
           - Output as markdown with code snippets if available.
@@ -147,7 +147,7 @@ const formatOutputWithChatGPT = async (
           - Make sure to not do spelling mistakes. Please use the words from the documentation.
         `}
         ${oneLine`
-          - Keep the answer clear and organised as possible.
+          - Keep the answer short, clear and organised as possible.
         `}
       `,
     },
