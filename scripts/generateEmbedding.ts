@@ -205,7 +205,7 @@ async function generateEmbeddings() {
   for (const markdownFile of markdownFiles) {
     const path = markdownFile.replace(/^data/, "").replace(/\.mdx?$/, "");
     try {
-      const contents = await readFile(markdownFile, "utf8");
+      const contents = await readFile(markdownFile, "utf16le");
       const { checksum, meta, sections } = processMdxForSearch(contents);
 
       // Create/update page record. Intentionally clear checksum until we
