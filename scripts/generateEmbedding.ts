@@ -195,8 +195,9 @@ async function walk(dir: string): Promise<string[]> {
   return flattenedFiles;
 }
 
+const failed: unknown[] = []
 async function generateEmbeddings() {
-  const markdownFiles = (await walk("data")).filter((fileName) =>
+  const markdownFiles = (await walk("scripts/data")).filter((fileName) =>
     /\.mdx?$/.test(fileName)
   );
 
@@ -205,8 +206,10 @@ async function generateEmbeddings() {
   for (const markdownFile of markdownFiles) {
     const path = markdownFile.replace(/^data/, "").replace(/\.mdx?$/, "");
     try {
-      const contents = await readFile(markdownFile, "utf16le");
-      const { checksum, meta, sections } = processMdxForSearch(contents);
+      const contents = (await readFile(markdownFile)).toString("utf-8");
+      // encodeURIComponent encodes all special charactors
+      const escapedContent = encodeURIComponent(contents);
+      const { checksum, meta, sections } = processMdxForSearch(escapedContent);      
 
       // Create/update page record. Intentionally clear checksum until we
       // have successfully generated all page sections.
@@ -219,7 +222,9 @@ async function generateEmbeddings() {
       console.log(
         `Adding ${sections.length} page sections (with embeddings) for '${path}'`
       );
-      for (const section of sections) {
+      for (const encodedSection of sections) {
+        // decodeURIComponent decodes all special charactors
+        const section = decodeURIComponent(encodedSection)
         // OpenAI recommends replacing newlines with spaces for best results (specific to embeddings)
         const input = section.replace(/\n/g, " ");
 
