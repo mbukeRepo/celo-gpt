@@ -36,10 +36,6 @@ export default function Home() {
     }
   }
 
-  // useEffect(() => {
-  //   updateScroll();
-  // }, []);
-
   const handleSubmit = (e: any) => {
     if (message !== "") {
       updateScroll();
