@@ -118,7 +118,7 @@ export default function Home() {
                     {
                       role: "bot",
                       content:
-                        "Hi,👋 I'm Celo GPT. I'm a chatbot that uses GPT-3 to answer your questions about Celo.",
+                        "Hi,👋 I'm Celo GPT. I read the entire update version of the Celo documentation. Ask me anything about Celo.",
                     },
                     ...messages,
                   ].map((msg, i) => (
