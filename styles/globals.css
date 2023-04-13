@@ -7,6 +7,12 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
+html {
+  height: 100vh;
+}
+body {
+  height: 100%;
+}
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -17,7 +23,7 @@
 }
 
 body {
-  @apply bg-gray-900;
+  @apply bg-gray-900 overflow-hidden;
 }
 
 .pattern {
@@ -53,7 +59,7 @@ body {
 }
 .scroller::-webkit-scrollbar {
   height: 1rem;
-  width: 0.5rem;
+  width: 0.4rem;
 }
 .scroller::-webkit-scrollbar-thumb {
   background-color: rgb(64 45 86 / 83%);

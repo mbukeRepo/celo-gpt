@@ -36,10 +36,6 @@ export default function Home() {
     }
   }
 
-  // useEffect(() => {
-  //   updateScroll();
-  // }, []);
-
   const handleSubmit = (e: any) => {
     if (message !== "") {
       updateScroll();
@@ -60,7 +56,7 @@ export default function Home() {
       <div className={poppins.className + " h-full"}>
         <div className=" relative w-full">
           <div className="md:py-10 h-full py-0">
-            <div className="max-w-2xl md:h-[600px] h-[100dvh] shadow-2xl overflow-hidden bg-gray-900 bg-opacity-30 text-gray-300 rounded-none md:rounded-[3px] relative z-50 mx-auto border border-gray-800">
+            <div className="max-w-2xl md:h-[600px] h-[100dvh] shadow-2xl overflow-hidden bg-gray-900 bg-opacity-60 backdrop-blur-sm text-gray-300 rounded-none md:rounded-[3px] relative z-50 mx-auto border border-gray-800">
               <div className="absolute -z-50 top-0 w-full h-full opacity-10">
                 <img
                   className="h-full w-full object-contain object-center"
@@ -68,14 +64,14 @@ export default function Home() {
                   alt=""
                 />
               </div>
-              <div className="flex absolute bg-gray-900 bg-opacity-40 backdrop-blur-sm top-0 w-full border-b border-gray-800 items-center justify-between px-3 py-2">
+              <div className="flex absolute bg-gray-900 bg-opacity-90 backdrop-blur-md top-0 w-full border-b border-gray-800 items-center justify-between px-3 py-2">
                 <div className="flex items-center gap-2">
                   <img
                     src="celo-gpt.webp"
                     className="h-6 w-6 rounded-[3px]"
                     alt=""
                   />
-                  <h4 className="font-medium text-[15px] px-1">Mbuke GPT</h4>
+                  <h4 className="font-medium text-[15px] px-1">Celo GPT</h4>
                 </div>
                 <div>
                   <a
@@ -128,9 +124,9 @@ export default function Home() {
                   ].map((msg, i) => (
                     <div
                       key={i}
-                      className={`flex items-start gap-4 mx-0 md:mx-3 px-3 py-2 ${
+                      className={`flex items-start gap-2 md:gap-2 mx-0 md:mx-3 px-3 py-2 ${
                         msg.role === "bot"
-                          ? "bg-gray-800 pb-4 bg-opacity-30 border-gray-800 border border-opacity-70 rounded-[3px] my-2"
+                          ? "bg-gray-800 pb-4 bg-opacity-30 first-of-type:border-t-0 md:border-x md:border-t border-x-0 border-gray-800 border border-opacity-70 rounded-[3px] my-2"
                           : ""
                       }`}
                     >
@@ -210,7 +206,7 @@ export default function Home() {
                   </div>
                 ) : null}
               </div>
-              <div className="border-t bg-gray-900 bg-opacity-90 backdrop-blur-sm absolute bottom-0 w-full py-2 px-2 border-gray-800">
+              <div className="border-t bg-gray-900 bg-opacity-90 backdrop-blur-sm fixed md:absolute bottom-0 w-full py-2 px-2 border-gray-800">
                 <form
                   onSubmit={(e) => {
                     handleSubmit(e);
@@ -230,7 +226,7 @@ export default function Home() {
                     value={message}
                     className="bg-transparent outline-none text-gray-300 font-[400] resize-none text-sm w-full py-1 px-2"
                     rows={1}
-                    placeholder="Ask on open eneded question"
+                    placeholder="Ask me anything about Celo."
                   />
 
                   <a
@@ -280,90 +276,9 @@ export default function Home() {
             }}
             className="absolute bg-cover bg-center h-screen opacity-50  w-full bg-gradient-to-b from-[#0c1120] top-0"
           />
-          <div className="absolute h-screen w-full bg-gradient-to-b from-[#0c1120] top-0" />
+          <div className="absolute h-screen w-full bg-gradient-to-b to-gray-900/10 from-gray-900/90 top-0" />
         </div>
       </div>
-
-      {/* <main className="flex bg-[#FCF6F1] h-screen flex-col items-center justify-between p-24-">
-        <main
-          className={`min-h-screen px-4  bg-gray-400- place-content-center grid min-w-[100vw]- ${poppins.className}`}
-        >
-          <div className="max-w-[800px] relative h-full border-3 border-[#331E3F] bg-[#E7E3D4] text-gray-900 shadow-lg md:rounded-md py-8 flex  mx-auto">
-            <div className="self-end w-full pb-12 flex h-[73vh] md:h-[65vh] overflow-scroll scroll-hidden flex-col justify-between">
-              <div className="flex flex-col gap-3">
-                <div className="flex gap-3 px-5">
-                  <Image
-                    className="w-[40px]  h-[40px] rounded-lg"
-                    src={Celo}
-                    alt="celo logo"
-                  />
-                  <p className="max-w-[400px]-">
-                    Hi there! I'm <span className="font-bold">celo-gpt</span>, a
-                    chatbot powered by chatGPT. I read the entire update version
-                    of the Celo documentation. Ask me anything about Celo
-                    ecosystem.
-                  </p>
-                </div>
-                <div className="flex flex-col gap-3">
-                  {messages.map(
-                    (msg: { role: string; content: string }, i: number) =>
-                      msg.role === "user" ? (
-                        <p key={i} className="bg-[#FCF6F1] p-5 flex gap-5">
-                          <div>
-                            <User className="w-[30px]  h-[30px] text-gray-600" />
-                          </div>
-                          {msg.content}
-                        </p>
-                      ) : (
-                        <div key={i} className="p-5 flex gap-3">
-                          <Image
-                            className="w-[40px]  h-[40px] rounded-lg"
-                            src={Celo}
-                            alt="celo logo"
-                          />
-                          <AIMessage
-                            setLoading={setLoading}
-                            query={msg.content}
-                          />
-                        </div>
-                      )
-                  )}
-                </div>
-              </div>
-            </div>
-            <form
-              className="absolute px-2 flex bottom-5 max-w-[320px] md:max-w-md left-1/2 -trangray-x-1/2 w-full"
-              onSubmit={(e) => {
-                setLoading(true);
-                sendMessage(e, message);
-                setMessage("");
-              }}
-            >
-              <input
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                }}
-                disabled={loading}
-                placeholder="Type a message..."
-                className="outline-none max-w-md mx-auto w-full h-12 px-4 rounded-lg border bg-[#FCF6F1] border-gray-300"
-              />
-              {!loading ? (
-                <button type="submit">
-                  <Send className="absolute right-4 md:right-4 text-gray-600 top-1/2 -trangray-y-1/2" />
-                </button>
-              ) : (
-                <button
-                  className="absolute right-4 text-gray-600 top-1/2 -trangray-y-1/2"
-                  disabled
-                >
-                  <Spinner className="w-6 h-6 " />
-                </button>
-              )}
-            </form>
-          </div>
-        </main>
-      </main> */}
     </>
   );
 }
