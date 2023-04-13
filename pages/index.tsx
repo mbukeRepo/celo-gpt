@@ -230,7 +230,7 @@ export default function Home() {
                     value={message}
                     className="bg-transparent outline-none text-gray-300 font-[400] resize-none text-sm w-full py-1 px-2"
                     rows={1}
-                    placeholder="Ask on open eneded question"
+                    placeholder="Ask me anything about Celo"
                   />
 
                   <a
