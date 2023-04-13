@@ -50,7 +50,7 @@ export default function Home() {
     <>
       <Head>
         <title>celo-gpt</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="https://docs.celo.org/img/color-favicon.png" />
       </Head>
 
       <div className={poppins.className + " h-full"}>
