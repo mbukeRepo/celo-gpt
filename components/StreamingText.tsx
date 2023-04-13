@@ -14,10 +14,11 @@ import { FetchBufferOptions } from "../hooks/types";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
-import he from "he";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dark } from "react-syntax-highlighter/dist/cjs/styles/hljs";
+
+import { nightOwl } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { id } from "common-tags";
 // import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 // import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -35,6 +36,9 @@ export interface StreamingTextProps extends HTMLAttributes<HTMLElement> {
    * The duration of the fade-in animation in milliseconds. Defaults to 600.
    */
   fade?: number;
+  loading?: boolean;
+  loadingMessage?: number;
+  done?: boolean;
 }
 
 /**
@@ -60,6 +64,9 @@ export const StreamingText: FC<StreamingTextProps> = ({
   buffer,
   as: ElementType = "p",
   fade = 600,
+  loading,
+  loadingMessage,
+  done,
   ...props
 }) => {
   const text = buffer.join("");
@@ -108,35 +115,58 @@ export const StreamingText: FC<StreamingTextProps> = ({
 
     setIndex(index + 1);
   }, [buffer, fade, index]);
-  const markdown = ReactDOMServer.renderToStaticMarkup(
-    fadedChunks as any
-  ).replace(/<\/?span[^>]*>/g, "");
+
+  const markdown = ReactDOMServer.renderToStaticMarkup(fadedChunks as any)
+    .replace(/<\/?span[^>]*>/g, "")
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">");
   return (
     // @ts-ignore - ref any
-    <p className="markdown" ref={textRef} {...props}>
+    <>
       <ReactMarkdown
         rehypePlugins={[rehypeRaw]}
-        children={ReactDOMServer.renderToStaticMarkup(fadedChunks as any)
-          .replace(/<\/?span[^>]*>/g, "")
-          .replace(/&quot;/g, '"')
-          .replace(/&lt;/g, "<")
-          .replace(/&gt;/g, ">")}
+        children={markdown}
         remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
         components={{
-          code({ node, inline, className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || "");
-            return !inline && match ? (
-              <SyntaxHighlighter
+          a: ({ node, href, children, ...props }) => {
+            const isInternalLink = href && href.startsWith("/");
+
+            return (
+              <a
                 {...props}
-                children={String(children).replace(/\n$/, "")}
-                style={dark}
-                language={match[1]}
-                PreTag="div"
-              />
+                href={isInternalLink ? "https://docs.celo.org" + href : href}
+                target="_blank"
+              >
+                {children}
+              </a>
+            );
+          },
+          p: ({ children }) => (
+            <p className="markdown-p !leading-8">
+              {children}
+              {loading && !done && (
+                <span className="w-[5px] hidden relative top-[2px] mt-1 ml-2 blink bg-slate-300 h-[16px]"></span>
+              )}
+            </p>
+          ),
+          code({ node, inline, className, children, ...props }) {
+            const match = /language-(\w+)/.exec(className || "js");
+            return !inline && match ? (
+              <div className="pre-syntax">
+                <SyntaxHighlighter
+                  {...props}
+                  children={String(children).replace(/\n$/, "")}
+                  style={nightOwl}
+                  language={match[1]}
+                  PreTag="div"
+                />
+              </div>
             ) : (
+              // </div>
               <code
                 {...props}
-                className={`py-[2px] rounded-md px-4 bg-[#FCF6F1]`}
+                className={`py-[3px] rounded-[2px] text-slate-300 px-2 bg-slate-700 bg-opacity-30`}
               >
                 {children}
               </code>
@@ -144,7 +174,10 @@ export const StreamingText: FC<StreamingTextProps> = ({
           },
         }}
       />
-    </p>
+      {loading && fadedChunks.length === 0 && !done && (
+        <span className="w-[5px] inline-flex relative top-[2px] mt-1 ml-2 blink bg-slate-300 h-[16px]"></span>
+      )}
+    </>
   );
 };
 

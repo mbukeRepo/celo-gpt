@@ -2,7 +2,6 @@ import { useCallback, useEffect, useReducer } from "react";
 import { yieldStream } from "yield-stream";
 import { BufferHook } from "./types";
 import { State, streamState } from "./state";
-import { useChat } from "@/context/chat-context";
 
 /**
  * Fetch a stream from a URL and return the updated buffer as it is received.
