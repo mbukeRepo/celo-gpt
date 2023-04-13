@@ -75,7 +75,7 @@ export default function Home() {
                     className="h-6 w-6 rounded-[3px]"
                     alt=""
                   />
-                  <h4 className="font-medium text-[15px] px-1">Mbuke GPT</h4>
+                  <h4 className="font-medium text-[15px] px-1">Celo GPT</h4>
                 </div>
                 <div>
                   <a
