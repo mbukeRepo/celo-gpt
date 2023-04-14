@@ -18,6 +18,7 @@ import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 import { nightOwl } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { id } from "common-tags";
 // import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 // import { dark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
@@ -36,6 +37,8 @@ export interface StreamingTextProps extends HTMLAttributes<HTMLElement> {
    */
   fade?: number;
   loading?: boolean;
+  loadingMessage?: number;
+  done?: boolean;
 }
 
 /**
@@ -62,6 +65,8 @@ export const StreamingText: FC<StreamingTextProps> = ({
   as: ElementType = "p",
   fade = 600,
   loading,
+  loadingMessage,
+  done,
   ...props
 }) => {
   const text = buffer.join("");
@@ -124,10 +129,23 @@ export const StreamingText: FC<StreamingTextProps> = ({
         children={markdown}
         remarkPlugins={[[remarkGfm, { singleTilde: false }]]}
         components={{
+          a: ({ node, href, children, ...props }) => {
+            const isInternalLink = href && href.startsWith("/");
+
+            return (
+              <a
+                {...props}
+                href={isInternalLink ? "https://docs.celo.org" + href : href}
+                target="_blank"
+              >
+                {children}
+              </a>
+            );
+          },
           p: ({ children }) => (
             <p className="markdown-p !leading-8">
               {children}
-              {loading && (
+              {loading && !done && (
                 <span className="w-[5px] hidden relative top-[2px] mt-1 ml-2 blink bg-slate-300 h-[16px]"></span>
               )}
             </p>
@@ -135,7 +153,7 @@ export const StreamingText: FC<StreamingTextProps> = ({
           code({ node, inline, className, children, ...props }) {
             const match = /language-(\w+)/.exec(className || "js");
             return !inline && match ? (
-              <pre className="pre-syntax">
+              <div className="pre-syntax">
                 <SyntaxHighlighter
                   {...props}
                   children={String(children).replace(/\n$/, "")}
@@ -143,8 +161,9 @@ export const StreamingText: FC<StreamingTextProps> = ({
                   language={match[1]}
                   PreTag="div"
                 />
-              </pre>
+              </div>
             ) : (
+              // </div>
               <code
                 {...props}
                 className={`py-[3px] rounded-[2px] text-slate-300 px-2 bg-slate-700 bg-opacity-30`}
@@ -155,7 +174,7 @@ export const StreamingText: FC<StreamingTextProps> = ({
           },
         }}
       />
-      {loading && fadedChunks.length === 0 && (
+      {loading && fadedChunks.length === 0 && !done && (
         <span className="w-[5px] inline-flex relative top-[2px] mt-1 ml-2 blink bg-slate-300 h-[16px]"></span>
       )}
     </>

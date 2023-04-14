@@ -8,7 +8,7 @@ const Spinner = ({ className }: { className: string }) => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className={`${className} animate-spin`}
+      className={`${className} h-5 animate-spin`}
     >
       <path
         strokeLinecap="round"
