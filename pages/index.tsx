@@ -50,7 +50,7 @@ export default function Home() {
     <>
       <Head>
         <title>celo-gpt</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="https://docs.celo.org/img/color-favicon.png" />
       </Head>
 
       <div className={poppins.className + " h-full"}>
@@ -118,7 +118,7 @@ export default function Home() {
                     {
                       role: "bot",
                       content:
-                        "Hi,👋 I'm Celo GPT. I'm a chatbot that uses GPT-3 to answer your questions about Celo.",
+                        "Hi,👋 I'm Celo GPT. I read the entire latest version of the Celo documentation. Ask me anything about Celo.",
                     },
                     ...messages,
                   ].map((msg, i) => (

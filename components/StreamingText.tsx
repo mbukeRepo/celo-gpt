@@ -14,6 +14,7 @@ import { FetchBufferOptions } from "../hooks/types";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import ReactMarkdown from "react-markdown";
+import he from "he";
 
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
@@ -116,11 +117,13 @@ export const StreamingText: FC<StreamingTextProps> = ({
     setIndex(index + 1);
   }, [buffer, fade, index]);
 
-  const markdown = ReactDOMServer.renderToStaticMarkup(fadedChunks as any)
-    .replace(/<\/?span[^>]*>/g, "")
-    .replace(/&quot;/g, '"')
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">");
+  const markdown = he.unescape(
+    ReactDOMServer.renderToStaticMarkup(fadedChunks as any)
+      .replace(/<\/?span[^>]*>/g, "")
+      .replace(/&quot;/g, '"')
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+  );
   return (
     // @ts-ignore - ref any
     <>
