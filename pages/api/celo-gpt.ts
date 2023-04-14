@@ -102,7 +102,7 @@ const formatOutputWithChatGPT = async (
           You are a very enthusiastic Celo AI who loves
           to help people! Given the following information from
           the celo documentation, answer the user's question using
-          only that information, outputted in markdown format.
+          only that information in a very short and clear summary, outputted in markdown format.
         `}
         ${oneLine`
           If you are unsure
@@ -138,7 +138,7 @@ const formatOutputWithChatGPT = async (
           "Sorry, I don't know how to help with that."
         `}
         ${oneLine`
-          - Prefer splitting your response into multiple paragraphs and add one blank line between them.
+          - Prefer splitting your response into multiple paragraphs and add two blank line between them.
         `}
         ${oneLine`
           - Output as markdown with code snippets if available.
@@ -147,7 +147,7 @@ const formatOutputWithChatGPT = async (
           - Make sure to not do spelling mistakes. Please use the words from the documentation.
         `}
         ${oneLine`
-          - Keep the answer short, clear and organised as possible.
+          - Answer in keytakeaways format with 10 words paragraph list separated by 2 blank lines.
         `}
       `,
     },
